@@ -20,23 +20,35 @@ import {
   deletePerson,
   initializeDB,
   Person,
+  Persons,
 } from "@/database"; // Import initializeDB
+import { useNavigation } from "expo-router";
+
+
 
 const Dashboard = () => {
+  const navigation = useNavigation();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("Select Gender");
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
+  const [gender, setGender] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState(""); // New state for marital status
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
-  const [editingPersonId, setEditingPersonId] = useState<number | null>(null); // Track if updating a person
+  const [persons, setPersons] = useState<Persons[]>([]);
+  const [editingPersonId, setEditingPersonId] = useState<number | null>(null);
+
+  const handleNext = () => {
+    (navigation as any).navigate("IndicativeInformation");
+  };
 
   const onChangeDate = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === "ios");
+    setShowDatePicker(false); // Close the date picker after selecting a date
     setDate(currentDate);
   };
 
@@ -55,12 +67,18 @@ const Dashboard = () => {
   }, []);
 
   const handleSubmit = async () => {
+    console.log("Submitting data:", firstName, lastName, phone, email, province, district, ward, date, gender, maritalStatus);
     if (
-      !firstName ||
-      !lastName ||
-      !phone ||
-      !email ||
-      gender === "Select Gender"
+      !firstName || 
+      !lastName || 
+      !phone || 
+      !email || 
+      !province || 
+      !district || 
+      !ward || 
+      !date || 
+      !gender || 
+      !maritalStatus // Ensure marital status is also checked
     ) {
       Alert.alert("Error", "Please fill in all fields correctly.");
       return;
@@ -75,8 +93,12 @@ const Dashboard = () => {
           lastName,
           phone,
           email,
+          province,
+          district,
+          ward,
           date.toISOString(),
-          gender
+          gender,
+          maritalStatus // Include marital status
         );
         console.log("Person updated successfully");
       } else {
@@ -86,8 +108,12 @@ const Dashboard = () => {
           lastName,
           phone,
           email,
+          province,
+          district,
+          ward,
           date.toISOString(),
-          gender
+          gender,
+          maritalStatus // Include marital status
         );
         console.log("Person created successfully with ID:", id);
       }
@@ -114,8 +140,12 @@ const Dashboard = () => {
     setLastName(person.lastName);
     setPhone(person.phone);
     setEmail(person.email);
+    setProvince(person.province);
+    setDistrict(person.district);
+    setWard(person.ward);
     setGender(person.gender);
-    setDate(new Date(person.date)); // Assuming dateOfBirth is a string
+    setMaritalStatus(person.maritalStatus); // Populate marital status
+    setDate(new Date(person.date)); // Assuming date is a valid date string
     setEditingPersonId(person.id); // Set the ID for updating
   };
 
@@ -125,12 +155,17 @@ const Dashboard = () => {
     setLastName("");
     setPhone("");
     setEmail("");
-    setGender("Select Gender");
+    setProvince("");
+    setDistrict("");
+    setWard("");
+    setGender("");
+    setMaritalStatus(""); // Reset marital status
     setDate(new Date());
     setEditingPersonId(null); // Reset ID for creating new entries
   };
 
   return (
+    
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.header}>Data Entry Form</Text>
@@ -170,6 +205,32 @@ const Dashboard = () => {
           placeholderTextColor="#888"
         />
 
+        <TextInput
+          style={styles.input}
+          placeholder="Province"
+          value={province}
+          onChangeText={setProvince}
+          placeholderTextColor="#888"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="District"
+          value={district}
+          onChangeText={setDistrict}
+          keyboardType="numeric"
+          placeholderTextColor="#888"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Ward"
+          value={ward}
+          onChangeText={setWard}
+          keyboardType="numeric"
+          placeholderTextColor="#888"
+        />
+
         <Picker
           selectedValue={gender}
           onValueChange={(itemValue) => setGender(itemValue)}
@@ -179,6 +240,18 @@ const Dashboard = () => {
           <Picker.Item label="Male" value="male" />
           <Picker.Item label="Female" value="female" />
           <Picker.Item label="Other" value="other" />
+        </Picker>
+        
+        <Picker
+          selectedValue={maritalStatus}
+          onValueChange={(itemValue) => setMaritalStatus(itemValue)}
+          style={styles.picker}
+        >
+         <Picker.Item label={"Select Maritial Status"} value=""/>
+         <Picker.Item label="Single" value="single" />
+         <Picker.Item label="Married" value="married" />
+         <Picker.Item label="Divorced" value="divorced" />
+         <Picker.Item label="Widowed" value="widowed" />
         </Picker>
 
         <View>
@@ -199,10 +272,17 @@ const Dashboard = () => {
           </Text>
         </View>
 
-        <Button
-          title={selectedPerson ? "Update" : "Submit"}
+        <TouchableOpacity
+          style={styles.next}
+          onPress={() => handleNext()}
+        >
+            <Text style={styles.buttonText}>Next</Text>
+         </TouchableOpacity>
+
+        {/* <Button
+          title={editingPersonId ? "Update" : "Submit"}
           onPress={handleSubmit}
-        />
+        /> */}
 
         {/* Table to display records */}
         <View style={styles.tableContainer}>
@@ -211,7 +291,11 @@ const Dashboard = () => {
             <Text style={styles.tableHeaderText}>Last Name</Text>
             <Text style={styles.tableHeaderText}>Phone</Text>
             <Text style={styles.tableHeaderText}>Email</Text>
+            <Text style={styles.tableHeaderText}>Province</Text>
+            <Text style={styles.tableHeaderText}>District</Text>
+            <Text style={styles.tableHeaderText}>Ward</Text>
             <Text style={styles.tableHeaderText}>Gender</Text>
+            <Text style={styles.tableHeaderText}>Marital Status</Text>
             <Text style={styles.tableHeaderText}>Date of Birth</Text>
             <Text style={styles.tableHeaderText}>Actions</Text>
           </View>
@@ -221,7 +305,11 @@ const Dashboard = () => {
               <Text style={styles.tableRowText}>{person.lastName}</Text>
               <Text style={styles.tableRowText}>{person.phone}</Text>
               <Text style={styles.tableRowText}>{person.email}</Text>
+              <Text style={styles.tableRowText}>{person.province}</Text>
+              <Text style={styles.tableRowText}>{person.district}</Text>
+              <Text style={styles.tableRowText}>{person.ward}</Text>
               <Text style={styles.tableRowText}>{person.gender}</Text>
+              <Text style={styles.tableRowText}>{person.maritalStatus}</Text>
               <Text style={styles.tableRowText}>
                 {new Date(person.date).toDateString()}
               </Text>
@@ -247,6 +335,7 @@ const Dashboard = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -257,7 +346,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#7d3c98",
     textAlign: "center",
     marginBottom: 30,
   },
@@ -327,6 +416,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   deleteButton: { backgroundColor: "#F44336", padding: 5, borderRadius: 5 },
+  next: { backgroundColor: "#F44336", padding: 5, borderRadius: 5, alignItems: 'center', marginBottom: 10, height: 30,},
   buttonText: { color: "#fff", fontWeight: "bold" },
 });
 

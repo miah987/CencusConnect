@@ -70,6 +70,42 @@ export default function TabLayout() {
           ),
         }}
       />
+            <Tabs.Screen
+        name="Dashboard"
+        options={{
+          title: "Dashboard",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+                  <Tabs.Screen
+        name="IndicativeInformation"
+        options={{
+          title: "Indicative Information",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+                        <Tabs.Screen
+        name="Endpage"
+        options={{
+          title: "End Page",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

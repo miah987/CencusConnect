@@ -6,10 +6,18 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
+import { useNavigation } from "expo-router";
 
 const AuthComponent = () => {
+  const navigation = useNavigation();
   // State to track which form is displayed (Sign In or Sign Up)
   const [isSignIn, setIsSignIn] = useState(true);
+
+  const handleDashboard = () => {
+    // code to handle the browse action
+    (navigation as any).navigate("Dashboard");
+  };
+
 
   // Switch between Sign In and Sign Up form
   const toggleForm = () => {
@@ -20,7 +28,7 @@ const AuthComponent = () => {
     <View style={styles.container}>
       {/* Title */}
       <Text style={styles.headerText}>
-        {isSignIn ? "Sign In to Your Account" : "Create a New Account"}
+        {isSignIn ? "Enter Your Credentials" : "Create a New Account"}
       </Text>
 
       {/* Input Fields */}
@@ -48,10 +56,8 @@ const AuthComponent = () => {
       )}
 
       {/* Action Button */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>
-          {isSignIn ? "Sign In" : "Sign Up"}
-        </Text>
+      <TouchableOpacity style={styles.button} onPress={() => handleDashboard()}>
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 
       {/* Toggle between forms */}

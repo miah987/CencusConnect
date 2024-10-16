@@ -30,22 +30,25 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+              <Image style={styles.header1} source={require('@/assets/images/logo1.png')}/>
+      
       {/* Two Text Messages */}
       <Text style={styles.headerText}>Civil Registry Portal</Text>
       <Text style={styles.subText}>
         Explore and manage your content with ease.
       </Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => handleDashboard()}>
+      {/* <TouchableOpacity style={styles.button} onPress={() => handleDashboard()}>
         <Text style={styles.buttonText}>Data Entry</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         style={styles.buttonSecondary}
         onPress={() => handleSignIn()}
       >
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>Getting Started</Text>
       </TouchableOpacity>
+      <Image style={styles.banner} source={require('@/assets/images/banner.png')}/>
     </View>
   );
 }
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5", // Light background for contrast against buttons
+    backgroundColor: "#45b39d", // Light background for contrast against buttons
   },
   headerText: {
     fontSize: 30,
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 40, // Space between text and buttons
   },
   button: {
-    backgroundColor: "#4CAF50", // Modern green color
+    backgroundColor: "#e74c3c", // Modern green color
     borderRadius: 12,
     paddingVertical: 15,
     paddingHorizontal: 50,
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     elevation: 5, // Elevation for Android
   },
   buttonSecondary: {
-    backgroundColor: "#2196F3", // Stylish blue for Sign In/Sign Up buttons
+    backgroundColor: "#e74c3c", // Stylish blue for Sign In/Sign Up buttons
     borderRadius: 12,
     paddingVertical: 15,
     paddingHorizontal: 50,
@@ -102,4 +105,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
   },
+header : {
+  height: 100,
+  width: 200,
+  left: 10,
+  borderRadius: 60,
+},
+header1 : {
+  height: 150,
+  width: 250,
+  left: 10,
+  borderRadius: 60,
+},
+banner : {
+  height: 150,
+  width: 200,
+
+}
 });

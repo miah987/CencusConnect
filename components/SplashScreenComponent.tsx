@@ -41,9 +41,11 @@ const SplashScreenComponent = () => {
     <View style={styles.container}>
       {/* Animated Text with Emojis */}
       <Animated.View style={animatedStyle}>
-        <Text style={styles.emoji}>🚀</Text>
-        <Text style={styles.text}>Welcome to PNG's One and Only</Text>
-        <Text style={styles.emoji}>✨🎉</Text>
+        <Image style={styles.header} source={require('@/assets/images/header.png')}/>
+
+        <Text style={styles.emoji}></Text>
+        <Text style={styles.text}>CencusConnect</Text>
+        <Text style={styles.text1}>Counting Made Easier</Text>
       </Animated.View>
     </View>
   );
@@ -53,20 +55,31 @@ const SplashScreenComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4CAF50", // Green background color for a modern splash
+    backgroundColor: "#2e86c1", 
     justifyContent: "center",
     alignItems: "center",
   },
   text: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#fff", // White text for contrast
+    color: "#17202a", // White text for contrast
+    textAlign: "center",
+    marginTop: 10,
+  },
+  text1: {
+    fontSize: 20,
+    color: "#17202a", // White text for contrast
     textAlign: "center",
     marginTop: 10,
   },
   emoji: {
     fontSize: 64, // Large emoji size
     textAlign: "center",
+  },
+  header : {
+    height: 100,
+    width: 200,
+    left: 10,
   },
 });
 
